@@ -6,28 +6,39 @@ import { connect } from 'react-redux'
 
 function FavPage({ characters = [0] }) {
 
-    const [count, setCount] = useState([]);
+    const [count, setCount] = useState();
 
     useEffect(() => {
-        localStorage.favs = JSON.stringify(characters)
-        let favs = localStorage.getItem('favs')
-        // setCount()
-        console.log(favs)
+        if (!characters.length) {
+            let favs = JSON.stringify(localStorage.getItem('favs'));
+            setCount({favs: favs});
+        } else {
+            localStorage.setItem('favs', characters);
+            setCount(...characters);
+        }
     }, [])
-
 
     function renderCharacter(char, i) {
         return (
             <Card hide {...char} key={i} />
         )
     }
+
     return (
-        <div className={styles.container}>
+        < div className={styles.container} >
             <h2>Favoritos</h2>
-            {characters.map(renderCharacter)}
-            {!characters.length && <h3>No hay personajes agregados</h3>}
-        </div>
+            { characters.map(renderCharacter)}
+            { !characters.length && <h3>No hay personajes agregados</h3>}
+
+
+            {/* {console.log(typeof count, count)} */}
+            {console.log(typeof characters, characters)}
+
+
+            {/* {!characters.length && count[0].map(renderCharacter)} */}
+        </div >
     )
+
 }
 
 function mapState({ characters }) {
