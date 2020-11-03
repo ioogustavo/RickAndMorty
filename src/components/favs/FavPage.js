@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './favs.module.css'
 import Card from '../card/Card'
+import { connect } from 'react-redux'
 
-export default function FavPage({ characters = [0] }) {
+
+function FavPage({ characters = [0] }) {
+
+    const [count, setCount] = useState([]);
+
+    useEffect(() => {
+        localStorage.favs = JSON.stringify(characters)
+        let favs = localStorage.getItem('favs')
+        // setCount()
+        console.log(favs)
+    }, [])
+
+
     function renderCharacter(char, i) {
         return (
-            <Card key={i} />
+            <Card hide {...char} key={i} />
         )
     }
     return (
@@ -16,3 +29,11 @@ export default function FavPage({ characters = [0] }) {
         </div>
     )
 }
+
+function mapState({ characters }) {
+    return {
+        characters: characters.favorites
+    }
+}
+
+export default connect(mapState)(FavPage)
